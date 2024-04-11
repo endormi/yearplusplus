@@ -1,0 +1,55 @@
+name: Update year
+
+on:
+  schedule:
+    - cron: "0 1 1 1 *" # 01:00 on January 1
+
+jobs:
+  yearplusplus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Update year in specified files
+        run: |
+          if [ -n "${{ inputs.files }}" ]; then
+            files="${{ inputs.files }}"
+            custom_from_year="${{ inputs.custom_from_year }}"
+            custom_to_year="${{ inputs.custom_to_year }}"
+
+            if [ -z "$custom_from_year" ]; then
+              from_year=$(date --date="1 year ago" +%Y)
+            else
+              from_year="$custom_from_year"
+            fi
+
+            if [ -z "$custom_to_year" ]; then
+              to_year=$(date +%Y)
+            else
+              to_year="$custom_to_year"
+            fi
+
+            find $files -exec sed -i "s/${from_year}/${to_year}/g" {} \;
+          fi
+
+      - name: Setup Git configuration
+        run: |
+          git_user="${{ inputs.git_user }}"
+          if [ -z "$git_user" ]; then
+            git_user="Year++"
+          fi
+          git_email="${{ inputs.git_email }}"
+          if [ -z "$git_email" ]; then
+            git_email="<>"
+          fi
+          git config user.name "$git_user"
+          git config user.email "$git_email"
+
+      - name: Commit changes
+        run: |
+          commit_message="${{ inputs.commit_message }}"
+          if [ -z "$commit_message" ]; then
+            commit_message="Update copyright year"
+          fi
+          git commit -am "$commit_message"
+          git push origin ${{ github.ref }}
