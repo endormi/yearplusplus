@@ -1,0 +1,30 @@
+name: 'yearplusplus'
+description: 'Update year in specified files and commit changes to Git'
+author: 'Endormi'
+inputs:
+  files:
+    description: 'Files to update'
+    required: true
+  custom_from_year:
+    description: 'Custom starting year'
+    required: false
+    default: 'Last year'
+  custom_to_year:
+    description: 'Custom ending year'
+    required: false
+    default: 'Current year'
+  git_user:
+    description: 'Git username'
+    required: false
+    default: 'Year++'
+  git_email:
+    description: 'Git email'
+    required: false
+    default: '<>'
+  commit_message:
+    description: 'Commit message'
+    required: false
+    default: 'Update copyright year'
+runs:
+  using: 'composite'
+  command: './update_year.sh'
