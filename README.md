@@ -42,8 +42,12 @@ jobs:
 
       - name: Commit changes
         run: |
-          git commit -am "Update copyright year"
-          git push origin ${{ github.head_ref }}
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -am "Update copyright year"
+            git push origin ${{ github.head_ref }}
+          else
+            echo "No changes to commit."
+          fi
 ```
 
 ## License
