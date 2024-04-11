@@ -11,55 +11,21 @@ inputs:
   current_year:
     description: 'Custom current year'
     required: false
-  git_user:
-    description: 'Git username'
-    required: false
-    default: 'Year++'
-  git_email:
-    description: 'Git email'
-    required: false
-    default: '<>'
-  commit_message:
-    description: 'Commit message'
-    required: false
-    default: 'Update copyright year'
 runs:
   using: 'composite'
   steps:
     - run: |
         echo "Files to update: ${{ inputs.files }}"
         files="${{ inputs.files }}"
-        last_year="${{ inputs.last_year }}"
-        current_year="${{ inputs.current_year }}"
+        from_year="${{ inputs.last_year }}"
+        to_year="${{ inputs.current_year }}"
 
-        if [ -z "$last_year" ]; then
-          last_year=$(date --date="1 year ago" +%Y)
+        if [ -z "$from_year" ]; then
+          from_year=$(date --date="1 year ago" +%Y)
         fi
 
-        if [ -z "$current_year" ]; then
-          current_year=$(date +%Y)
+        if [ -z "$to_year" ]; then
+          to_year=$(date +%Y)
         fi
-        find $files -exec sed -i "s/${last_year}/${current_year}/g" {} \;
-      shell: bash
-    - name: Setup Git configuration
-      run: |
-        git_user="${{ inputs.git_user }}"
-        if [ -z "$git_user" ]; then
-          git_user="Year++"
-        fi
-        git_email="${{ inputs.git_email }}"
-        if [ -z "$git_email" ]; then
-          git_email="<>"
-        fi
-        git config user.name "$git_user"
-        git config user.email "$git_email"
-      shell: bash
-    - name: Commit changes
-      run: |
-        commit_message="${{ inputs.commit_message }}"
-        if [ -z "$commit_message" ]; then
-          commit_message="Update copyright year"
-        fi
-        git commit -am "$commit_message"
-        git push origin ${{ github.ref }}
+        find $files -exec sed -i "s/${from_year}/${to_year}/g" {} \;
       shell: bash
