@@ -1,3 +1,5 @@
 # yearplusplus
 
-GitHub Action to automatically ypdate year in specified files.
+GitHub Action to automatically update year in specified files.
+
+Not working correctly at the moment...
