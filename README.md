@@ -1,3 +1,3 @@
 # yearplusplus
 
-GitHub Action to automatically change copyright year.
+GitHub Action to automatically ypdate year in specified files.
