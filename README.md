@@ -10,6 +10,12 @@ GitHub Action to automatically update year in specified files.
 | `from_year` | Year to replace (customizable)     | No       | Last year     |
 | `to_year`   | Year to replace with (customizable)| No       | Current year  |
 
+One of these is required for this Workflow to work (otherwise you get an 403 error):
+
+Option 1: Go to Settings of your repository, then navigate to Actions > General. Under "Workflow permissions," choose Read and write permissions.
+
+Option 2: Create a PAT (Personal Access Token) with the necessary permissions. You can do this in your GitHub account settings. Once created, add the PAT as a secret in your repository settings and use it in your workflow.
+
 ## Example
 
 ```yaml
@@ -25,8 +31,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        # You might not need this
+        # with:
+          # token: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # Whichever name you decide to use.
 
       - name: Update year in specified files
         uses: endormi/yearplusplus@v1
