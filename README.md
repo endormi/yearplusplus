@@ -4,11 +4,14 @@ GitHub Action to automatically update year in specified files.
 
 ## Usage
 
-| Input Name  | Description                        | Required | Default Value |
-|-------------|------------------------------------|----------|---------------|
-| `files`     | Files to update                    | Yes      |               |
-| `from_year` | Year to replace (customizable)     | No       | Last year     |
-| `to_year`   | Year to replace with (customizable)| No       | Current year  |
+| Input Name  | Description                             | Required | Default Value             |
+|-------------|-----------------------------------------|----------|---------------------------|
+| `files`          | Files to update                    | Yes      |                           |
+| `username`       | Username for the commit            | No       | github-actions[bot]       |
+| `email`          | Email for the commit               | No       | github-actions[bot] email |
+| `commit_message` | Commit message                     | No       | Update copyright year     |
+| `from_year`      | Year to replace (customizable)     | No       | Last year                 |
+| `to_year`        | Year to replace with (customizable)| No       | Current year              |
 
 One of these is required for this Workflow to work (otherwise you get an 403 error):
 
@@ -36,25 +39,14 @@ jobs:
           # token: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # Whichever name you decide to use.
 
       - name: Update year in specified files
-        uses: endormi/yearplusplus@v1
+        uses: endormi/yearplusplus@v2
         with:
-          files: 'LICENSE'    # Provide the file(s) you want to update
-          # from_year: '2023' # Optional: specify a custom year to replace (defaults to last year)
-          # to_year: '2024'   # Optional: specify a custom year to replace with (defaults to current year)
-
-      - name: Setup Git configuration
-        run: |
-          git config user.name "Year++"
-          git config user.email "<>"
-
-      - name: Commit changes
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -am "Update copyright year"
-            git push origin ${{ github.head_ref }}
-          else
-            echo "No changes to commit."
-          fi
+          files: 'LICENSE'      # Provide the file(s) you want to update
+          # username: 'Year++'  # Optional: specify a username (defaults to 'github-actions[bot]')
+          # email: '<>'         # Optional: specify an email (defaults to 'github-actions[bot]@users.noreply.github.com')
+          # commit_message: ''  # Optional: specify commit message (defaults to 'Update copyright year')
+          # from_year: '2023'   # Optional: specify the year to replace (defaults to last year)
+          # to_year: '2024'     # Optional: specify the year to replace with (defaults to current year)
 ```
 
 ## License
